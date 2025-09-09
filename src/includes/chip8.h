@@ -6,7 +6,8 @@
 
 struct chip8
 {
-    struct chip8_memory memory;
+    struct memory memory;
+    struct registers registers;
 };
 
 #endif
