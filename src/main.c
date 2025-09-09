@@ -1,7 +1,7 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
 
-
+#include "./includes/chip8.h"
 
 int main(int argc, char const *argv[])
 {
@@ -11,10 +11,11 @@ int main(int argc, char const *argv[])
     else 
     {
         window = SDL_CreateWindow( 
-            "Hello World SDL", 
+            EMU_WINDOW_TITLE, 
             SDL_WINDOWPOS_UNDEFINED, 
             SDL_WINDOWPOS_UNDEFINED, 
-            640, 320, 
+            CHIP8_WIDTH * CHIP8_WINDOW_MULTIPLIER, 
+            CHIP8_HEIGHT * CHIP8_WINDOW_MULTIPLIER, 
             SDL_WINDOW_SHOWN 
         );
 
