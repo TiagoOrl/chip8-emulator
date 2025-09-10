@@ -3,11 +3,13 @@
 
 #include "./config.h"
 #include "./chip8memory.h"
-#include "chip8registers.h"
+#include "./chip8registers.h"
+#include "./chip8stack.h"
 
 struct chip8
 {
     struct memory memory;
+    struct stack stack;
     struct registers registers;
 };
 
