@@ -7,5 +7,8 @@
 #define CHIP8_HEIGHT 32
 #define CHIP8_WINDOW_MULTIPLIER 10
 
+#define DATA_REGISTERS_COUNT 16
+#define TOTAL_STACK_DEPTH 16
+
 
 #endif

@@ -5,7 +5,19 @@
 
 int main(int argc, char const *argv[])
 {
+    struct chip8 chip8;
     SDL_Window * window;
+
+    chip8.registers.SP = 0;
+
+    chip8_stack_push(&chip8, 0xff);
+    chip8_stack_push(&chip8, 0x12);
+
+    printf("%x \n", chip8_stack_pop(&chip8));
+    printf("%x \n", chip8_stack_pop(&chip8));
+
+
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         printf("SDL init error: %s", SDL_GetError());
     else 
