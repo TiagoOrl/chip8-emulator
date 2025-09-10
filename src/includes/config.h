@@ -10,5 +10,7 @@
 #define DATA_REGISTERS_COUNT 16
 #define TOTAL_STACK_DEPTH 16
 
+#define TOTAL_KEYS 16
+
 
 #endif

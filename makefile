@@ -1,7 +1,7 @@
 
 
 
-OBJECTS= ./build/chip8memory.o ./build/chip8stack.o
+OBJECTS= ./build/chip8memory.o ./build/chip8stack.o ./build/chip8keyboard.o
 FLAGS= -g
 
 all: ${OBJECTS}
@@ -13,6 +13,10 @@ all: ${OBJECTS}
 
 ./build/chip8stack.o: ./src/chip8stack.c
 	gcc -o ./build/chip8stack.o ${FLAGS} -c ./src/chip8stack.c
+
+
+./build/chip8keyboard.o: ./src/chip8keyboard.c
+	gcc -o ./build/chip8keyboard.o ${FLAGS} -c ./src/chip8keyboard.c
 
 cl:
 	rm -r ./bin/* ./build/* main
