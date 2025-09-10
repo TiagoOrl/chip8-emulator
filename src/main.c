@@ -1,21 +1,15 @@
 #include <stdio.h>
 #include <SDL2/SDL.h>
+#include <stdbool.h>
 
 #include "./includes/chip8.h"
+
+
 
 int main(int argc, char const *argv[])
 {
     struct chip8 chip8;
     SDL_Window * window;
-
-    chip8.registers.SP = 0;
-
-    chip8_stack_push(&chip8, 0xff);
-    chip8_stack_push(&chip8, 0x12);
-
-    printf("%x \n", chip8_stack_pop(&chip8));
-    printf("%x \n", chip8_stack_pop(&chip8));
-
 
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
@@ -37,11 +31,26 @@ int main(int argc, char const *argv[])
         while(1) 
         {
             SDL_Event event;
+            char key;
+            int vkey = -1;
 
             while (SDL_PollEvent(&event))
             {
-                if (event.type == SDL_QUIT)
-                    goto out;
+                switch(event.type)
+                {
+                    case SDL_QUIT:
+                        goto out;
+                    break;
+
+                    case SDL_KEYDOWN:
+                        chip8_keyboard_down(&chip8.keyboard, event.key.keysym.sym);
+                    break;
+
+                    case SDL_KEYUP:
+                        chip8_keyboard_up(&chip8.keyboard, event.key.keysym.sym);
+                    break;
+                }
+             
             }
 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);

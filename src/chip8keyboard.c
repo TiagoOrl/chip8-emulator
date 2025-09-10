@@ -1,7 +1,11 @@
 #include "./includes/chip8keyboard.h"
 #include <assert.h>
+#include <stdio.h>
 
-
+const char keyboard_map[TOTAL_KEYS] = {
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+	'a', 'b', 'c', 'd', 'e', 'f'
+};
 
 static void chip8_keyboard_ensure_in_bounds(int key)
 {
@@ -23,15 +27,23 @@ int chip8_keyboard_map(const char* map, char key)
 }
 
 
-void chip8_keyboard_down(struct keyboard* keyboard,int key)
+void chip8_keyboard_down(struct keyboard* keyboard, char in_key)
 {
-	keyboard->keyboard[key] = true;
+	int out_key = chip8_keyboard_map(keyboard_map, in_key);
+
+	if (out_key != -1)
+		keyboard->keyboard[out_key] = true;
+
+	
 }
 
 
-void chip8_keyboard_up(struct keyboard* keyboard,int key)
+void chip8_keyboard_up(struct keyboard* keyboard, char in_key)
 {
-	keyboard->keyboard[key] = false;
+	int out_key = chip8_keyboard_map(keyboard_map, in_key);
+
+	if (out_key != -1)
+		keyboard->keyboard[out_key] = false;
 }
 
 
