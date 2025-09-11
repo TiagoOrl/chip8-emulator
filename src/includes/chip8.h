@@ -6,6 +6,7 @@
 #include "./chip8registers.h"
 #include "./chip8stack.h"
 #include "./chip8keyboard.h"
+#include "./chip8screen.h"
 
 struct chip8
 {
@@ -13,6 +14,7 @@ struct chip8
     struct stack stack;
     struct registers registers;
     struct keyboard keyboard;
+    struct screen screen;
 };
 
 

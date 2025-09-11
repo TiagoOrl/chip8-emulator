@@ -13,6 +13,8 @@ int main(int argc, char const *argv[])
 
     chip8_init(&chip8);
 
+    chip8_screen_set(&chip8.screen, 63, 31);
+
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         printf("SDL init error: %s", SDL_GetError());
     else 
@@ -21,8 +23,8 @@ int main(int argc, char const *argv[])
             EMU_WINDOW_TITLE, 
             SDL_WINDOWPOS_UNDEFINED, 
             SDL_WINDOWPOS_UNDEFINED, 
-            CHIP8_WIDTH * CHIP8_WINDOW_MULTIPLIER, 
-            CHIP8_HEIGHT * CHIP8_WINDOW_MULTIPLIER, 
+            CHIP8_WIDTH * SCREEN_MULTIPLIER, 
+            CHIP8_HEIGHT * SCREEN_MULTIPLIER, 
             SDL_WINDOW_SHOWN 
         );
 
@@ -54,16 +56,26 @@ int main(int argc, char const *argv[])
              
             }
 
+
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             SDL_RenderClear(renderer);
-
             SDL_SetRenderDrawColor(renderer, 255, 255, 255, 0);
-            SDL_Rect r;
-            r.x = 0;
-            r.y = 0;
-            r.w = 40;
-            r.h = 40;
-            SDL_RenderFillRect(renderer, &r);
+
+            for (int x = 0; x < CHIP8_WIDTH; x++)
+            {
+                for (int y = 0; y < CHIP8_HEIGHT; y++)
+                {
+                    if (chip8_screen_is_set(&chip8.screen, x, y))
+                    {
+                        SDL_Rect r;
+                        r.x = x * SCREEN_MULTIPLIER;
+                        r.y = y * SCREEN_MULTIPLIER;
+                        r.w = SCREEN_MULTIPLIER;
+                        r.h = SCREEN_MULTIPLIER;
+                        SDL_RenderFillRect(renderer, &r);
+                    }
+                }
+            }
             SDL_RenderPresent(renderer);
         }
         
