@@ -11,6 +11,7 @@ int main(int argc, char const *argv[])
     struct chip8 chip8;
     SDL_Window * window;
 
+    chip8_init(&chip8);
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         printf("SDL init error: %s", SDL_GetError());

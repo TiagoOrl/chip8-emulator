@@ -33,8 +33,6 @@ void chip8_keyboard_down(struct keyboard* keyboard, char in_key)
 
 	if (out_key != -1)
 		keyboard->keyboard[out_key] = true;
-
-	
 }
 
 

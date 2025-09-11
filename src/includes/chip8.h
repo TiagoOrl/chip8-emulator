@@ -15,4 +15,7 @@ struct chip8
     struct keyboard keyboard;
 };
 
+
+void chip8_init(struct chip8* chip8);
+
 #endif
