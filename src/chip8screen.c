@@ -21,3 +21,24 @@ bool chip8_screen_is_set(struct screen* screen, unsigned int x, unsigned int y)
     chip8_screen_check_bounds(x, y);
     return screen->pixels[y][x];
 }
+
+
+bool chip8_screen_draw_sprite(struct screen* screen, 
+    int x, int y, 
+    const char* sprite, int num)
+{
+    bool pixel_collision = false;
+
+
+    for (int ly = 0; ly < num; ly++)
+    {
+        char c = sprite[ly];
+        for (int lx = 0; lx < 8; lx++)
+        {
+            if ((c & (0b10000000 >> lx)) == 0)
+                continue;
+        }
+    }
+
+    return pixel_collision;
+}
