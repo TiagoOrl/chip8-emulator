@@ -2,6 +2,7 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
+
 #include "./includes/chip8.h"
 
 
@@ -12,6 +13,7 @@ int main(int argc, char const *argv[])
     SDL_Window * window;
 
     chip8_init(&chip8);
+    chip8.registers.delay_timer = 255;
 
 
     chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
@@ -80,6 +82,14 @@ int main(int argc, char const *argv[])
                 }
             }
             SDL_RenderPresent(renderer);
+
+            if (chip8.registers.delay_timer > 0)
+            {
+                SDL_Delay(100);
+                chip8.registers.delay_timer -= 1;
+                printf("Delay!!\n");
+            }
+                
         }
         
         
