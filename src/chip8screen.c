@@ -36,8 +36,9 @@ bool chip8_screen_draw_sprite(struct screen* screen,
         {
             if ((c & (0b10000000 >> lx)) == 0)
                 continue;
-
-            screen->pixels[ly + y][lx + x] = true;
+            
+            
+            screen->pixels[(ly + y) % CHIP8_HEIGHT][(lx + x) % CHIP8_WIDTH] = true;
         }
     }
 
