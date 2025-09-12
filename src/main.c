@@ -13,7 +13,10 @@ int main(int argc, char const *argv[])
 
     chip8_init(&chip8);
 
-    chip8_screen_set(&chip8.screen, 63, 31);
+
+    chip8_screen_draw_sprite(&chip8.screen, 0, 0, &chip8.memory.memory[0x05], 5);
+
+
 
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         printf("SDL init error: %s", SDL_GetError());
