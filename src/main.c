@@ -14,7 +14,7 @@ int main(int argc, char const *argv[])
     SDL_Window * window;
 
     chip8_init(&chip8);
-    chip8.registers.delay_timer = 255;
+    chip8.registers.sound_timer = 50;
 
 
     chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
@@ -90,11 +90,13 @@ int main(int argc, char const *argv[])
                 chip8.registers.delay_timer -= 1;
                 printf("Delay!!\n");
             }
-                
+
+            if (chip8.registers.sound_timer > 0)
+            {
+                toot(60, 100 * chip8.registers.sound_timer);
+                chip8.registers.sound_timer = 0;
+            }  
         }
-        
-        
-        
     }
     
 
