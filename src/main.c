@@ -4,6 +4,7 @@
 
 
 #include "./includes/chip8.h"
+#include "./toot/tootlib.h"
 
 
 
