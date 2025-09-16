@@ -132,6 +132,13 @@ int main(int argc, char const *argv[])
                 // toot(60, 100 * chip8.registers.sound_timer);
                 chip8.registers.sound_timer = 0;
             }  
+
+            unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
+            chip8_exec(&chip8, opcode);
+            chip8.registers.PC += 2;
+            
+            
+
         }
     }
     
