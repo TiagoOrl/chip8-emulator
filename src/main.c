@@ -46,13 +46,9 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    
-
-
-
 
     chip8_init(&chip8);
-    chip8_load(&chip8, "Hello World", sizeof("Hello World"));
+    chip8_load(&chip8, buf, size);
 
 
 
