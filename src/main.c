@@ -13,8 +13,48 @@ int main(int argc, char const *argv[])
     struct chip8 chip8;
     SDL_Window * window;
 
+    if (argc < 2)
+    {
+        printf("You must provide a file to load!\n");
+        return -1;
+    }
+
+    const char * filename = argv[1];
+    printf("Filename is: %s\n", filename);
+
+    FILE * f = fopen(filename, "r");
+    if (!f)
+    {
+        printf("Error opening file %s \n", filename);
+        return -1;
+    }
+
+
+    fseek(f, 0, SEEK_END); // move to the end of the file stream
+    long size = ftell(f);  // get the size/position of the file
+    fseek(f, 0, SEEK_SET); // move back to the beginning of the file
+
+
+    // creates a buffer the size of the file
+    char buf[size];
+    // reads the full filestream into the buffer
+    int res = fread(buf, size, 1, f);
+
+    if (res != 1)
+    {
+        printf("failed to read from file \n");
+        return -1;
+    }
+
+    
+
+
+
+
     chip8_init(&chip8);
-    chip8.registers.sound_timer = 50;
+    chip8_load(&chip8, "Hello World", sizeof("Hello World"));
+
+
 
 
     chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
@@ -93,7 +133,7 @@ int main(int argc, char const *argv[])
 
             if (chip8.registers.sound_timer > 0)
             {
-                toot(60, 100 * chip8.registers.sound_timer);
+                // toot(60, 100 * chip8.registers.sound_timer);
                 chip8.registers.sound_timer = 0;
             }  
         }
