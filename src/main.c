@@ -22,7 +22,7 @@ int main(int argc, char const *argv[])
     const char * filename = argv[1];
     printf("Filename is: %s\n", filename);
 
-    FILE * f = fopen(filename, "r");
+    FILE * f = fopen(filename, "rb");
     if (!f)
     {
         printf("Error opening file %s \n", filename);
