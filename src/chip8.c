@@ -44,12 +44,40 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
 {
     // get the last 12 bits
     unsigned short nnn = opcode & 0x0fff;
+    unsigned char x = (opcode >> 8) & 0x000f;
+    unsigned char y = (opcode >> 4) & 0x000f;
+    unsigned char kk = opcode & 0x00ff;
+
 
     switch (opcode & 0xf000)
     {
         // JP Address, 1nnn Jump to location nnn
         case 0x1000:
             chip8->registers.PC = nnn;
+        break;
+
+        // call addr, 2nnn call subroutine at location nnn
+        case 0x2000:
+            chip8_stack_push(chip8, chip8->registers.PC);
+            chip8->registers.PC = nnn;
+        break;
+
+        // SE Vx, byte = 3xkk skip next instruction if Vx = kk
+        case 0x3000:
+            if (chip8->registers.V[x] == kk)
+            {
+                chip8->registers.PC += 2; // skips the next instruction
+            }
+
+        break;
+        
+        // SNE Vx, byte = 3xkk skip next instruction if Vx != kk
+        case 0x4000:
+            if (chip8->registers.V[x] != kk)
+            {
+                chip8->registers.PC += 2; // skips the next instruction
+            }
+
         break;
     }
 }
