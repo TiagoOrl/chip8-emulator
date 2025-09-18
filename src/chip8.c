@@ -40,12 +40,36 @@ void chip8_load(struct chip8 * chip8, const char * buf, size_t size)
 }
 
 
+static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
+{
+    // get the last 12 bits
+    unsigned short nnn = opcode & 0x0fff;
+
+    switch (opcode & 0xf000)
+    {
+        // JP Address, 1nnn Jump to location nnn
+        case 0x1000:
+            chip8->registers.PC = nnn;
+        break;
+    }
+}
+
+
 void chip8_exec(struct chip8 * chip8, unsigned short opcode)
 {
     switch (opcode)
-    {
+    {   
+        // cls: clear the display
         case 0x00e0:
             chip8_screen_clear(&chip8->screen);
         break;
+
+        // ret: return from subroutine
+        case 0x00ee:
+            chip8->registers.PC = chip8_stack_pop(chip8);
+        break;
+
+        default:
+            chip8_exec_extended(chip8, opcode);
     }
 }
