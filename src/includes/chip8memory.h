@@ -12,6 +12,6 @@ struct memory
 
 void chip8_memory_set(struct memory * memory, int index, char val);
 unsigned char chip8_memory_get(struct memory * memory, int index);
-
+unsigned short chip8_memory_get_short(struct memory * memory, int index);
 
 #endif

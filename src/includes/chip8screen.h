@@ -10,7 +10,7 @@ struct screen
     bool pixels[CHIP8_HEIGHT][CHIP8_WIDTH];
 };
 
-
+void chip8_screen_clear(struct screen * screen);
 void chip8_screen_set(struct screen* screen, unsigned int x, unsigned int y);
 bool chip8_screen_is_set(struct screen* screen, unsigned int x, unsigned int y);
 bool chip8_screen_draw_sprite(struct screen* screen, 

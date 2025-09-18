@@ -1,11 +1,17 @@
 #include "./includes/chip8screen.h"
 #include <assert.h>
-
+#include <memory.h>
 
 static void chip8_screen_check_bounds(int x, int y)
 {
     assert(x >= 0 && x < CHIP8_WIDTH);
     assert(y >= 0 && y < CHIP8_HEIGHT);
+}
+
+
+void chip8_screen_clear(struct screen * screen)
+{
+    memset(screen->pixels, 0, sizeof(screen->pixels));
 }
 
 
