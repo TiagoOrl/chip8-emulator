@@ -53,16 +53,23 @@ static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcod
             chip8->registers.V[x] = chip8->registers.V[y];
         break;
 
-        // 8xy1 - OR Vx, Vy -> Vx OR Vy store in Vx
+        // 8xy1 - OR Vx, Vy store in Vx
         case 0x01:
             chip8->registers.V[x] |= chip8->registers.V[y];
         break;
 
 
-        // 8xy2 - AND Vx, Vy -> Vx AND Vy store in Vy
+        // 8xy2 - AND Vx, Vy store in Vx
         case 0x02:
             chip8->registers.V[x] &= chip8->registers.V[y];
         break;
+
+        // 8xy3 - XOR Vx, Vy store in Vx
+        case 0x03:
+            chip8->registers.V[x] ^= chip8->registers.V[y];
+        break;
+
+        
     }
 }
 
