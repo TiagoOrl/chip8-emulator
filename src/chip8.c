@@ -40,6 +40,33 @@ void chip8_load(struct chip8 * chip8, const char * buf, size_t size)
 }
 
 
+static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcode)
+{
+    unsigned char x = (opcode >> 8) & 0x000f;
+    unsigned char y = (opcode >> 4) & 0x000f;
+    unsigned char final_four_bits = opcode & 0x000f;
+
+    switch (final_four_bits)
+    {   
+        // 8xy0 - LD Vx, Vy -> Vx = Vy
+        case 0x00:
+            chip8->registers.V[x] = chip8->registers.V[y];
+        break;
+
+        // 8xy1 - OR Vx, Vy -> Vx OR Vy store in Vx
+        case 0x01:
+            chip8->registers.V[x] |= chip8->registers.V[y];
+        break;
+
+
+        // 8xy2 - AND Vx, Vy -> Vx AND Vy store in Vy
+        case 0x02:
+            chip8->registers.V[x] &= chip8->registers.V[y];
+        break;
+    }
+}
+
+
 static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
 {
     // get the last 12 bits
@@ -78,6 +105,28 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
                 chip8->registers.PC += 2; // skips the next instruction
             }
 
+        break;
+
+        // 5xy0 = SE \vx Vy, skip the next instruction if Vx == Vy
+        case 0x5000:
+            if (chip8->registers.V[x] == chip8->registers.V[y])
+            {
+                chip8->registers.PC += 2; // skips the next instruction
+            }
+        break;
+
+        // 6xkk LD Vx, byte - Vx == kk
+        case 0x6000:
+            chip8->registers.V[x] = kk;
+        break;  
+
+        // 7xkk - add Vx, byte. Set Vx = Vx + kk
+        case 0x7000:
+            chip8->registers.V[x] += kk;
+        break;
+
+        case 0x8000:
+            chip8_exec_extended_eight(chip8, opcode);
         break;
     }
 }
