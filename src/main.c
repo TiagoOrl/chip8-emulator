@@ -51,9 +51,7 @@ int main(int argc, char const *argv[])
     chip8_load(&chip8, buf, size);
 
 
-
-
-    chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
+    // chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
 
 
 

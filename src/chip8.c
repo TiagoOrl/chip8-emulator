@@ -1,6 +1,7 @@
 #include "./includes/chip8.h"
 #include <memory.h>
 #include <assert.h>
+#include <stdbool.h>
 
 
 const char chip8_default_char_set[] = {
@@ -45,6 +46,7 @@ static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcod
     unsigned char x = (opcode >> 8) & 0x000f;
     unsigned char y = (opcode >> 4) & 0x000f;
     unsigned char final_four_bits = opcode & 0x000f;
+    unsigned short tmp = 0;
 
     switch (final_four_bits)
     {   
@@ -69,8 +71,52 @@ static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcod
             chip8->registers.V[x] ^= chip8->registers.V[y];
         break;
 
+        // 8xy4 - ADD Vx, Vy store in Vx, set VF = carry
+        case 0x04:
+            tmp = chip8->registers.V[x] + chip8->registers.V[y];
+            chip8->registers.V[0x0f] = false;
+
+            if (tmp > 0xff)
+                chip8->registers.V[0x0f] = true;
+            
+            chip8->registers.V[x] = tmp;
+        break;
         
+        // 8xy5 - SUB Vx, Vy : Vx = Vx - Vy : set VF = not borrow
+        case 0x05:
+            chip8->registers.V[0x0f] = false;
+
+            if (chip8->registers.V[x] > chip8->registers.V[y])
+                chip8->registers.V[0x0f] = true;
+
+            chip8->registers.V[x] -= chip8->registers.V[y];
+        break;
+
+        // 8xy6 - SHR Vx {, Vy}0
+        case 0x06:
+            chip8->registers.V[0x0f] = chip8->registers.V[x] & 0x01;
+            chip8->registers.V[x] /= 2;
+        break;
+
+        // 8xy7 - SUBN Vx, Vy:  Vx = Vy - Vx set VF NOT borrow
+        case 0x07:
+            chip8->registers.V[0x0f] = chip8->registers.V[y] > chip8->registers.V[x];
+            chip8->registers.V[x] = chip8->registers.V[y] - chip8->registers.V[x];
+        break;
+
+        // 8xye : SHL Vx {, Vy}
+        case 0x0e:
+            chip8->registers.V[0x0f] = chip8->registers.V[x] & 0b10000000;
+            chip8->registers.V[x] *= 2;
+        break;
+
     }
+}
+
+
+static void chip8_exec_extended_nine(struct chip8 * chip8, unsigned short opcode)
+{
+    
 }
 
 
@@ -134,6 +180,10 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
 
         case 0x8000:
             chip8_exec_extended_eight(chip8, opcode);
+        break;
+
+        case 0x9000:
+            chip8_exec_extended_nine(chip8, opcode);
         break;
     }
 }
