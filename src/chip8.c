@@ -114,10 +114,6 @@ static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcod
 }
 
 
-static void chip8_exec_extended_nine(struct chip8 * chip8, unsigned short opcode)
-{
-    
-}
 
 
 static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
@@ -163,9 +159,7 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
         // 5xy0 = SE \vx Vy, skip the next instruction if Vx == Vy
         case 0x5000:
             if (chip8->registers.V[x] == chip8->registers.V[y])
-            {
                 chip8->registers.PC += 2; // skips the next instruction
-            }
         break;
 
         // 6xkk LD Vx, byte - Vx == kk
@@ -182,8 +176,21 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
             chip8_exec_extended_eight(chip8, opcode);
         break;
 
+        // SNE : skips the next instruction if Vx != Vy
         case 0x9000:
-            chip8_exec_extended_nine(chip8, opcode);
+            if (chip8->registers.V[x] != chip8->registers.V[y])
+                chip8->registers.PC += 2;
+        break;
+        
+        // Annn : LD I, addr. Sets the I register to nnn
+        case 0xA000:
+            chip8->registers.I = nnn;
+        break;
+
+
+        // Bnnn JP V0, addr : jumps to location nnn + V0
+        case 0xb000:
+            chip8->registers.PC = nnn + chip8->registers.V[0x00];
         break;
     }
 }
