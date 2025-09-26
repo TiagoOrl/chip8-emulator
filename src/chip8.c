@@ -207,7 +207,7 @@ static void chip8_exec_extended(struct chip8 * chip8, unsigned short opcode)
         case 0xd000:
         {
             // get the sprite address pointer from chip8 memory
-            const char * sprite = (const char*) chip8->memory.memory[chip8->registers.I];
+            const char * sprite = (const char*) &chip8->memory.memory[chip8->registers.I];
 
             chip8->registers.V[0x0f] = chip8_screen_draw_sprite(&chip8->screen, chip8->registers.V[x], 
                 chip8->registers.V[y], sprite, n);

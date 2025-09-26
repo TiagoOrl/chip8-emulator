@@ -50,6 +50,11 @@ int main(int argc, char const *argv[])
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
 
+    chip8.registers.I = 0x00;
+    chip8.registers.V[0] = 10;
+    chip8.registers.V[1] = 10;
+    chip8_exec(&chip8, 0xD015);
+
 
     // chip8_screen_draw_sprite(&chip8.screen, 62, 10, &chip8.memory.memory[0x14], 5);
 
@@ -132,8 +137,8 @@ int main(int argc, char const *argv[])
             }  
 
             unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
-            chip8.registers.PC += 2;
-            chip8_exec(&chip8, opcode);
+            // chip8.registers.PC += 2;
+            // chip8_exec(&chip8, opcode);
         }
     }
     
