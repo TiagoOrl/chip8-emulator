@@ -4,6 +4,7 @@
 #include <stdbool.h>
 #include <stdlib.h>
 #include <time.h>
+#include <SDL2/SDL.h>
 
 
 const char chip8_default_char_set[] = {
@@ -116,6 +117,26 @@ static void chip8_exec_extended_eight(struct chip8 * chip8, unsigned short opcod
 }
 
 
+static char chip8_wait_for_key_press(struct chip8 * chip8)
+{
+    SDL_Event ev;
+    while(SDL_WaitEvent(&ev))
+    {
+        if (ev.type != SDL_KEYDOWN)
+            continue;
+        
+
+        char chip8_key = chip8_keyboard_map(ev.key.keysym.sym);
+
+        if (chip8_key != -1)
+            return chip8_key;
+
+    }
+
+    return -1;
+}
+
+
 static void chip8_exec_extended_f(struct chip8 * chip8, unsigned short opcode)
 {
     unsigned char x = (opcode >> 8) & 0x000f;
@@ -126,6 +147,16 @@ static void chip8_exec_extended_f(struct chip8 * chip8, unsigned short opcode)
         case 0x07:
             chip8->registers.V[x] = chip8->registers.delay_timer;
         break;
+
+        // fx0a : LD Vx, K : wait for key press, store in Vx register
+        case 0x0A:
+        {   
+            char pressed_key = chip8_wait_for_key_press(chip8);
+            chip8->registers.V[x] = pressed_key;
+        }
+            
+        break;
+
     }
 }
 

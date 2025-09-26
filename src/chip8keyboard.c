@@ -13,11 +13,11 @@ static void chip8_keyboard_ensure_in_bounds(int key)
 }
 
 
-int chip8_keyboard_map(const char* map, char key)
+int chip8_keyboard_map(char key)
 {
 	for (int i = 0; i < TOTAL_KEYS; i++)
 	{
-		if (map[i] == key)
+		if (keyboard_map[i] == key)
 		{
 			return i;
 		}
@@ -29,7 +29,7 @@ int chip8_keyboard_map(const char* map, char key)
 
 void chip8_keyboard_down(struct keyboard* keyboard, char in_key)
 {
-	int out_key = chip8_keyboard_map(keyboard_map, in_key);
+	int out_key = chip8_keyboard_map(in_key);
 
 	if (out_key != -1)
 		keyboard->keyboard[out_key] = true;
@@ -38,7 +38,7 @@ void chip8_keyboard_down(struct keyboard* keyboard, char in_key)
 
 void chip8_keyboard_up(struct keyboard* keyboard, char in_key)
 {
-	int out_key = chip8_keyboard_map(keyboard_map, in_key);
+	int out_key = chip8_keyboard_map(in_key);
 
 	if (out_key != -1)
 		keyboard->keyboard[out_key] = false;
