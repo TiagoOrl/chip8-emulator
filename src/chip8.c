@@ -157,6 +157,15 @@ static void chip8_exec_extended_f(struct chip8 * chip8, unsigned short opcode)
             
         break;
 
+        // Fx15 : LD DT, Vx : set delay timer = Vx
+        case 0x15:
+            chip8->registers.delay_timer = chip8->registers.V[x];
+        break;
+
+        case 0x18:
+            
+        break;
+
     }
 }
 

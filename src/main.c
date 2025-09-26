@@ -2,16 +2,13 @@
 #include <SDL2/SDL.h>
 #include <stdbool.h>
 
-
 #include "./includes/chip8.h"
 #include "./toot/tootlib.h"
-
-
 
 int main(int argc, char const *argv[])
 {
     struct chip8 chip8;
-    SDL_Window * window;
+    SDL_Window *window;
 
     if (argc < 2)
     {
@@ -19,21 +16,19 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-    const char * filename = argv[1];
+    const char *filename = argv[1];
     printf("Filename is: %s\n", filename);
 
-    FILE * f = fopen(filename, "rb");
+    FILE *f = fopen(filename, "rb");
     if (!f)
     {
         printf("Error opening file %s \n", filename);
         return -1;
     }
 
-
     fseek(f, 0, SEEK_END); // move to the end of the file stream
     long size = ftell(f);  // get the size/position of the file
     fseek(f, 0, SEEK_SET); // move back to the beginning of the file
-
 
     // creates a buffer the size of the file
     char buf[size];
@@ -46,32 +41,25 @@ int main(int argc, char const *argv[])
         return -1;
     }
 
-
     chip8_init(&chip8);
     chip8_load(&chip8, buf, size);
 
-
-
-
-
-
     if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
         printf("SDL init error: %s", SDL_GetError());
-    else 
+    else
     {
-        window = SDL_CreateWindow( 
-            EMU_WINDOW_TITLE, 
-            SDL_WINDOWPOS_UNDEFINED, 
-            SDL_WINDOWPOS_UNDEFINED, 
-            CHIP8_WIDTH * SCREEN_MULTIPLIER, 
-            CHIP8_HEIGHT * SCREEN_MULTIPLIER, 
-            SDL_WINDOW_SHOWN 
-        );
+        window = SDL_CreateWindow(
+            EMU_WINDOW_TITLE,
+            SDL_WINDOWPOS_UNDEFINED,
+            SDL_WINDOWPOS_UNDEFINED,
+            CHIP8_WIDTH * SCREEN_MULTIPLIER,
+            CHIP8_HEIGHT * SCREEN_MULTIPLIER,
+            SDL_WINDOW_SHOWN);
+
+        SDL_Renderer *renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
 
 
-        SDL_Renderer * renderer = SDL_CreateRenderer(window, -1, SDL_TEXTUREACCESS_TARGET);
-
-        while(1) 
+        while (1)
         {
             SDL_Event event;
             char key;
@@ -79,23 +67,21 @@ int main(int argc, char const *argv[])
 
             while (SDL_PollEvent(&event))
             {
-                switch(event.type)
+                switch (event.type)
                 {
-                    case SDL_QUIT:
-                        goto out;
+                case SDL_QUIT:
+                    goto out;
                     break;
 
-                    case SDL_KEYDOWN:
-                        chip8_keyboard_down(&chip8.keyboard, event.key.keysym.sym);
+                case SDL_KEYDOWN:
+                    chip8_keyboard_down(&chip8.keyboard, event.key.keysym.sym);
                     break;
 
-                    case SDL_KEYUP:
-                        chip8_keyboard_up(&chip8.keyboard, event.key.keysym.sym);
+                case SDL_KEYUP:
+                    chip8_keyboard_up(&chip8.keyboard, event.key.keysym.sym);
                     break;
                 }
-             
             }
-
 
             SDL_SetRenderDrawColor(renderer, 0, 0, 0, 0);
             SDL_RenderClear(renderer);
@@ -129,14 +115,13 @@ int main(int argc, char const *argv[])
             {
                 // toot(60, 100 * chip8.registers.sound_timer);
                 chip8.registers.sound_timer = 0;
-            }  
+            }
 
             unsigned short opcode = chip8_memory_get_short(&chip8.memory, chip8.registers.PC);
             chip8.registers.PC += 2;
             chip8_exec(&chip8, opcode);
         }
     }
-    
 
 out:
     SDL_DestroyWindow(window);
