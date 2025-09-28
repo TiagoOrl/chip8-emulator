@@ -106,13 +106,13 @@ int main(int argc, char const *argv[])
 
             if (chip8.registers.delay_timer > 0)
             {
-                SDL_Delay(100);
+                SDL_Delay(30);
                 chip8.registers.delay_timer -= 1;
             }
 
             if (chip8.registers.sound_timer > 0)
             {
-                // toot(60, 100 * chip8.registers.sound_timer);
+                toot(1580 , 10 * chip8.registers.sound_timer);
                 chip8.registers.sound_timer = 0;
             }
 
