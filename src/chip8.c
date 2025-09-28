@@ -162,9 +162,59 @@ static void chip8_exec_extended_f(struct chip8 * chip8, unsigned short opcode)
             chip8->registers.delay_timer = chip8->registers.V[x];
         break;
 
+        // Fx18 : LD ST, Vx : ST is equal to the value of Vx register
         case 0x18:
-            
+            chip8->registers.sound_timer = chip8->registers.V[x];
         break;
+
+
+        // fx1e : ADD I, Vx
+        case 0x1E:
+            chip8->registers.I += chip8->registers.V[x];
+        break;
+
+
+        // Fx29 : LD F, Vx : set I = location of the sprite for digitt Vx
+        case 0x29:
+            chip8->registers.I = chip8->registers.V[x] * CHIP8_DEFAULT_SPRITE_HEIGHT;
+        break;
+
+
+        // Fx33 : LD B, Vx : store BCD representation of Vx in memory locations I, I + 1 and I + 2
+        case 0x33:
+        {
+            unsigned char hundreds = chip8->registers.V[x] / 100;
+            unsigned char tens = chip8->registers.V[x] / 10 % 10;
+            unsigned char units = chip8->registers.V[x] % 10;
+            
+            chip8_memory_set(&chip8->memory, chip8->registers.I, hundreds);
+            chip8_memory_set(&chip8->memory, chip8->registers.I + 1, tens);
+            chip8_memory_set(&chip8->memory, chip8->registers.I + 2, units);
+        }
+        break;
+
+
+        // Fx55 : LD [I], Vx : store registers V0 through Vx in memory starting at location I
+        case 0x55:
+        {
+            for (int i = 0; i <= x; i++)
+            {
+                chip8_memory_set(&chip8->memory, chip8->registers.I + i, chip8->registers.V[i]);
+            }
+        }
+        break;
+
+        // Fx65 :  LD Vx, [i] : read registers V0 through Vx from memory starting at location I
+        case 0x65:
+        {
+            unsigned short i_reg = chip8->registers.I;
+            for (int i = 0; i <= x; i++)
+            {
+                chip8->registers.V[i] = chip8_memory_get(&chip8->memory, i_reg + i);
+            }
+        }
+        break;
+
 
     }
 }

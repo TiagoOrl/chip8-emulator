@@ -15,5 +15,7 @@
 
 #define CHIP8_CHAR_SET_LOAD_ADDRESS 0x00
 
+#define CHIP8_DEFAULT_SPRITE_HEIGHT 5
+
 
 #endif
