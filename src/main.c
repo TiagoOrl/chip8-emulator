@@ -108,7 +108,6 @@ int main(int argc, char const *argv[])
             {
                 SDL_Delay(100);
                 chip8.registers.delay_timer -= 1;
-                printf("Delay!!\n");
             }
 
             if (chip8.registers.sound_timer > 0)
